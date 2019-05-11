@@ -61,7 +61,7 @@ function protectRowAC(row) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheets()[0];
   var range = sheet.getRange(row, 1, 1, sheet.getMaxColumns());
-  var protection = range.protect().setDescription('You got AC on this!');
+  var protection = range.protect().setDescription('You got AC/Pretest Passed on this!');
   protection.setWarningOnly(true);
 }
 
@@ -79,6 +79,8 @@ function onEdit(evt) {
   Logger.log("CURRENT ROW IS " + range.getRow());
   
   if (range.getColumn() == 7 && range.getRow() >= 5) {
+    var oldPenalty = getValue(range.getRow(), range.getColumn() + 8);
+
     if (status == "In progress") {
         var seenOnDateEmpty = isEmpty(range.getRow(), range.getColumn() + 3);
         if (seenOnDateEmpty) {
@@ -92,8 +94,12 @@ function onEdit(evt) {
         if (penaltyCellEmpty) {
           setValue(range.getRow(), range.getColumn() + 8, '0');
         }
-     }
-    else if (status == "AC") {
+    }
+    else if (status == "Pretest Passed" || status == "AC") {
+      if (status == "Pretest Passed") {
+        setValue(range.getRow(), range.getColumn() + 8, -1);
+      }
+      
       //first SOLVED TIME 
       var oldTimeMiliSec = getValue(range.getRow(), range.getColumn() + 5);
       var formattedTime = formatTime (timeMiliSec, oldTimeMiliSec);
@@ -107,8 +113,15 @@ function onEdit(evt) {
       protectRowAC(range.getRow());
     }
     else if (status == "Skipped" || status == "WA" || status == "TLE") {
-      var oldPenalty = getValue(range.getRow(), range.getColumn() + 8);
-      setValue(range.getRow(), range.getColumn() + 8, oldPenalty + 1);  
+      if (oldPenalty == -1) {
+        setValue(range.getRow(), range.getColumn() + 8, 0);
+      }
+      if (status == "Skipped") {
+        setValue(range.getRow(), range.getColumn() + 8, oldPenalty + 1);  
+      }
+      else {
+        setValue(range.getRow(), range.getColumn() + 8, oldPenalty + 0.25);
+      }
     }
     else if (status == "Upsolved") {
       //first SOLVED TIME 
