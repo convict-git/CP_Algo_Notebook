@@ -1,5 +1,5 @@
 # CP_Problem_TRACKER
-Google sheets based tracker for competitive programming 
+Google Script and sheets based tracker for competitive programming 
 
 [Link to pdf of sheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vSsG0WoQxQmo3IXctQzZu0GKY9vI8qRjRgpoQE1z8TkHFs3Qjo4v1ctCNA3QZV5iqjNYacSciE7IQjj/pub?gid=891834841&single=true&output=pdf)
 
